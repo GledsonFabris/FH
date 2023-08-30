@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formatador de Comandos</title>
+    <script>
+        function formatCommand() {
+            const inputText = document.getElementById('inputText').value.trim();
+            const selectedFormat = document.getElementById('formatSelect').value;
+            const lines = inputText.split('\n');
+            let formattedOutput = '';
+
+            lines.forEach(line => {
+                if (selectedFormat === 'format1') {
+                    const digits = line.match(/\d+/g);
+                    if (digits && digits.length >= 4) {
+                        formattedOutput += `display ont info ${digits[0]} ${digits[1]} ${digits[2]} ${digits[3]}\n`;
+                    }
+                } else if (selectedFormat === 'format2') {
+                    const parts = line.match(/display ont info (\d+) (\d+) (\d+) (\d+)/);
+                    if (parts) {
+                        formattedOutput += `undo service-port port ${parts[2]}/${parts[3]}/${parts[4]} ont ${parts[1]}\ny\n`;
+                    }
+                } else if (selectedFormat === 'format3') {
+                    const digits = line.match(/\d+/g);
+                    if (digits && digits.length >= 4) {
+                        formattedOutput += `interface gpon ${digits[0]}/${digits[1]}\n`;
+                        formattedOutput += `onu delete ${digits[2]} ${digits[3]}\n`;
+                        formattedOutput += 'quit\nquit\n';
+                    }
+                }
+            });
+
+            document.getElementById('outputText').value = formattedOutput;
+        }
+    </script>
+</head>
+<body>
+    <h1>Formatador de Comandos</h1>
+    <p>Escolha o tipo de formatação:</p>
+    <select id="formatSelect">
+        <option value="format1">Formato 1</option>
+        <option value="format2">Formato 2</option>
+        <option value="format3">Formato 3</option>
+    </select>
+    <br>
+    <p>Cole o comando aqui:</p>
+    <textarea id="inputText" rows="10" cols="50"></textarea>
+    <br>
+    <button onclick="formatCommand()">Formatar</button>
+    <br>
+    <p>Comando formatado:</p>
+    <textarea id="outputText" rows="10" cols="50" readonly></textarea>
+</body>
+</html>
